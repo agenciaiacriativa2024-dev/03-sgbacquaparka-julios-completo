@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGB Acquapark</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#007bff"/>
+</head>
+<body>
+    <div id="app-container">
+        <!-- Tela de Login -->
+        <div id="login-screen" class="screen">
+            <img src="logo.png" alt="Logomarca SGB Acquapark" class="logo">
+            <h1>SGB Acquapark</h1>
+            <form id="login-form">
+                <input type="email" id="login-email" placeholder="Email" required>
+                <input type="password" id="login-password" placeholder="Senha" required>
+                <button type="submit">Entrar</button>
+            </form>
+            <a href="#" id="show-register-user-flow">Cadastrar Usuário</a>
+        </div>
+
+        <!-- Fluxo de Cadastro de Usuário -->
+        <div id="register-user-flow-screen" class="screen" style="display: none;">
+            <h2>Verificar Email para Cadastro</h2>
+            <form id="register-user-flow-form">
+                <input type="email" id="register-flow-email" placeholder="Digite seu email" required>
+                <button type="submit">Enviar</button>
+            </form>
+            <button class="back-button">Voltar para Login</button>
+        </div>
+
+        <!-- Tela Inicial do CEO -->
+        <div id="ceo-home-screen" class="screen" style="display: none;">
+            <h2>Painel do CEO</h2>
+            <button id="ceo-manage-users">Gerenciar Usuários</button>
+            <button id="ceo-manage-passports">Gerenciar Passaportes</button>
+            <button id="ceo-manage-plans">Gerenciar Planos</button>
+            <button class="logout-button">Sair</button>
+        </div>
+
+        <!-- Tela Gerenciar Usuários (CEO) -->
+        <div id="manage-users-screen" class="screen" style="display: none;">
+            <h2>Gerenciar Usuários</h2>
+            <div class="form-section">
+                <h3>Novo Usuário</h3>
+                <form id="add-user-form">
+                    <input type="email" id="new-user-email" placeholder="Email do usuário" required>
+                    <select id="new-user-role" required>
+                        <option value="CEO">CEO</option>
+                        <option value="Secretaria">Secretaria</option>
+                        <option value="Portaria">Portaria</option>
+                    </select>
+                    <button type="submit">Cadastrar Usuário</button>
+                </form>
+            </div>
+            <div class="list-section">
+                <h3>Usuários Existentes</h3>
+                <ul id="users-list"></ul>
+            </div>
+            <button class="back-button floating-back-button">Voltar</button>
+        </div>
+
+        <!-- Tela Gerenciar Passaportes (CEO, Secretaria) -->
+        <div id="manage-passports-screen" class="screen" style="display: none;">
+            <h2>Gerenciar Passaportes</h2>
+            <button id="create-new-passport-button">Criar Novo Passaporte</button>
+            <div class="form-section">
+                <h3>Buscar Passaporte</h3>
+                <form id="search-passport-form">
+                    <select id="search-criteria">
+                        <option value="numeroPassaporte">Número do Passaporte</option>
+                        <option value="responsavelNome">Nome do Responsável</option>
+                        <option value="responsavelCPF">CPF do Responsável</option>
+                        <option value="carteirinhaNome">Nome do Titular</option>
+                    </select>
+                    <input type="text" id="search-value" placeholder="Valor da busca">
+                    <button type="submit">Buscar</button>
+                    <button type="button" id="clear-search-button">Limpar</button>
+                </form>
+            </div>
+            <div class="list-section">
+                <h3>Últimos Passaportes Criados</h3>
+                <ul id="passports-list"></ul>
+            </div>
+            <button class="back-button floating-back-button">Voltar</button>
+        </div>
+
+        <!-- Tela Criar Novo Passaporte (CEO, Secretaria) -->
+        <div id="create-passport-screen" class="screen" style="display: none;">
+            <h2>Criar Novo Passaporte</h2>
+            <form id="create-passport-form">
+                <h3>Dados do Responsável Financeiro</h3>
+                <input type="text" id="responsavel-nome" placeholder="Nome Completo" required>
+                <input type="text" id="responsavel-cpf" placeholder="CPF" required>
+                <label for="responsavel-data-nascimento">Data de Nascimento:</label>
+                <input type="date" id="responsavel-data-nascimento" required>
+                <input type="email" id="responsavel-email" placeholder="Email" required>
+                <input type="tel" id="responsavel-telefone" placeholder="Telefone" required>
+                <input type="text" id="responsavel-endereco" placeholder="Endereço" required>
+                <select id="responsavel-plano" required></select>
+                <select id="passaporte-novo-select" required>
+                    <option value="Sim">Passaporte Novo? Sim</option>
+                    <option value="Não">Passaporte Novo? Não</option>
+                </select>
+                <div id="passaporte-antigo-fields" style="display: none;">
+                    <input type="text" id="passaporte-antigo-tipo" placeholder="Tipo de Passaporte Antigo">
+                    <input type="text" id="passaporte-antigo-numero" placeholder="Número do Passaporte Antigo">
+                </div>
+                <button type="submit">Criar Passaporte</button>
+            </form>
+            <button class="back-button floating-back-button">Voltar</button>
+        </div>
+
+        <!-- Tela Editar Passaporte -->
+        <div id="edit-passport-screen" class="screen" style="display: none;">
+            <h2>Editar Passaporte</h2>
+            <form id="edit-passport-form">
+                <h3>Dados do Passaporte</h3>
+                <p><strong>Número:</strong> <span id="edit-passaporte-numero"></span></p>
+                <p><strong>Responsável:</strong> <span id="edit-responsavel-nome"></span></p>
+                <p><strong>CPF:</strong> <span id="edit-responsavel-cpf"></span></p>
+                <p><strong>Nascimento:</strong> <span id="edit-responsavel-data-nascimento"></span></p>
+                <input type="email" id="edit-responsavel-email" placeholder="Email" required>
+                <input type="tel" id="edit-responsavel-telefone" placeholder="Telefone" required>
+                <input type="text" id="edit-responsavel-endereco" placeholder="Endereço" required>
+                <select id="edit-responsavel-plano" required></select>
+                <button type="submit">Salvar Alterações</button>
+            </form>
+            <hr>
+            <h3>Carteirinhas</h3>
+            <button id="add-carteirinha-button">Adicionar Carteirinha</button>
+            <div id="carteirinhas-carousel" class="carousel"></div>
+            <button class="back-button floating-back-button">Voltar</button>
+        </div>
+
+        <!-- Tela Adicionar/Editar Carteirinha -->
+        <div id="edit-carteirinha-screen" class="screen" style="display: none;">
+            <h2 id="carteirinha-form-title">Adicionar Carteirinha</h2>
+            <form id="carteirinha-form">
+                <input type="hidden" id="carteirinha-id">
+                <select id="carteirinha-parentesco" required>
+                    <option value="">Selecione o Grau de Parentesco</option>
+                    <option value="Titular">Titular</option>
+                    <option value="Cônjuge">Cônjuge</option>
+                    <option value="Filho(a)">Filho(a)</option>
+                    <option value="Pai">Pai</option>
+                    <option value="Mãe">Mãe</option>
+                    <option value="Sogro(a)">Sogro(a)</option>
+                    <option value="Convidado">Convidado</option>
+                </select>
+                <input type="text" id="carteirinha-nome" placeholder="Nome Completo" required>
+                <input type="text" id="carteirinha-doc" placeholder="CPF/RG/ID ou Cert. Nasc." required>
+                <label for="carteirinha-data-nascimento">Data de Nascimento:</label>
+                <input type="date" id="carteirinha-data-nascimento" required>
+                <button type="button" id="take-face-photo-button">Tirar Foto Rosto</button>
+                <img id="face-photo-preview" class="photo-preview">
+                <button type="button" id="take-doc-photo-button">Tirar Foto Documento</button>
+                <img id="doc-photo-preview" class="photo-preview">
+                <canvas id="photo-canvas" style="display:none;"></canvas>
+                <button type="submit">Salvar Carteirinha</button>
+            </form>
+            <button class="back-button floating-back-button">Voltar</button>
+        </div>
+
+        <!-- Tela Gerenciar Planos (CEO) -->
+        <div id="manage-plans-screen" class="screen" style="display: none;">
+            <h2>Gerenciar Planos</h2>
+            <div class="form-section">
+                <h3>Novo Plano</h3>
+                <form id="plan-form">
+                    <input type="hidden" id="plan-id">
+                    <input type="text" id="plan-name" placeholder="Nome do Plano" required>
+                    <input type="number" id="plan-value" placeholder="Valor Mensal" step="0.01" required>
+                    <textarea id="plan-description" placeholder="Descrição do Plano" required></textarea>
+                    <button type="submit">Salvar Plano</button>
+                    <button type="button" id="cancel-edit-plan" style="display:none;">Cancelar Edição</button>
+                </form>
+            </div>
+            <div class="list-section">
+                <h3>Planos Existentes</h3>
+                <ul id="plans-list"></ul>
+            </div>
+            <button class="back-button floating-back-button">Voltar</button>
+        </div>
+
+        <!-- Tela Inicial da Secretaria -->
+        <div id="secretaria-home-screen" class="screen" style="display: none;">
+            <h2>Painel da Secretaria</h2>
+            <button id="secretaria-manage-passports">Gerenciar Passaportes</button>
+            <button class="logout-button">Sair</button>
+        </div>
+
+        <!-- Tela Inicial da Portaria -->
+        <div id="portaria-home-screen" class="screen" style="display: none;">
+            <h2>Controle de Acesso</h2>
+            <div id="qr-reader"></div>
+            <div id="qr-reader-result" style="display:none;">
+                <h3>Resultado da Leitura</h3>
+                <div id="access-result-card"></div>
+                <div id="access-actions">
+                    <button id="grant-access-button">Liberar Acesso</button>
+                    <button id="forward-to-secretary-button">Encaminhar à Secretaria</button>
+                </div>
+            </div>
+            <button class="logout-button">Sair</button>
+        </div>
+
+        <!-- Tela Inicial do Sócio Familiar -->
+        <div id="socio-home-screen" class="screen" style="display: none;">
+            <div class="header-card">
+                <p><strong>Passaporte:</strong> <span id="socio-passaporte-numero"></span></p>
+                <p><strong>Responsável:</strong> <span id="socio-responsavel-nome"></span></p>
+                <p><strong>Plano:</strong> <span id="socio-plano-nome"></span></p>
+            </div>
+            <button id="check-financial-status-button">Situação Financeira</button>
+            <button id="socio-add-carteirinha-button">Adicionar Dependente</button>
+            <h3>Minhas Carteirinhas</h3>
+            <div id="socio-carteirinhas-carousel" class="carousel"></div>
+            <div id="financial-details-section" style="display:none;">
+                <h4>Detalhes Financeiros</h4>
+                <ul id="charges-list"></ul>
+            </div>
+            <button class="logout-button">Sair</button>
+        </div>
+
+        <!-- Overlay de Loading -->
+        <div id="loading-overlay" style="display: none;">
+            <div class="spinner"></div>
+            <p>Carregando...</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/html5-qrcode/html5-qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator/qrcode.js"></script>
+
+    <script src="firebase-init.js" type="module"></script>
+    <script src="app.js" type="module"></script>
+</body>
+</html>
